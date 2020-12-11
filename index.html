@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+        <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    </head>
+
+    <body style="margin: 0; overflow: hidden;">
+        <div align="center" style='position: fixed; top: 10px; width:100%; text-align: right; z-index: 1;'>
+            <input type=button id="Left" value="Turn Left" onmousedown="Left()" onmouseup="Rotation1()"/>
+            <input type=button id="Right" value="Turn Right" onmousedown="Right()" onmouseup="Rotation1()"/>
+        </div>
+        <a-scene
+            vr-mode-ui="enabled: false;"
+            loading-screen="enabled: false;"
+            renderer="logarithmicDepthBuffer: true;"
+            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+            id="scene"
+            embedded
+            gesture-detector
+        >
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset"
+                    src="assets/asset.glb"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-marker
+                id="animated-marker"
+                type="pattern"
+                preset="custom"
+                url="assets/marker.patt"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerA"
+            >
+                <a-entity
+                    id="bowser-model"
+                    scale="0.005 0.005 0.005"
+                    animation-mixer="loop: repeat"
+                    gltf-model="#animated-asset"
+                    class="clickable"
+                    gesture-handler
+                ></a-entity>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+        </a-scene>
+        <script type="text/javascript">
+            gltf = document.querySelector('#bowser-model')
+            scene1 = document.querySelector('a-scene');
+            const scene = new THREE.Scene();
+            inputSpeed = -0.5;
+            Lvec = new THREE.Vector3( 1, 0, 0 );
+            point = new THREE.Vector3();
+            function leftGearBox(){
+                RIGHTassem.children[103].rotateX(inputSpeed)
+                RIGHTassem.children[96].rotateY(-inputSpeed/50)
+                RIGHTassem.children[97].rotateY(inputSpeed/100)
+            }
+            function rightGearBox(){
+                RIGHTassem.children[104].rotateX(inputSpeed)                
+                RIGHTassem.children[79].rotateY(-inputSpeed/50)                 
+                RIGHTassem.children[78].rotateY(inputSpeed/100)
+                RIGHTassem.children[98].rotateY(inputSpeed/100)
+            }
+            function Rotation(){                
+                leftGearBox();
+                rightGearBox();
+                mesh.translateOnAxis(Lvec,0.5)
+            }            
+            function RotateLeft(){
+                LEFTAssen.attach(RIGHTassem)
+                LEFTAssen.rotateY(0.01)
+                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),0.01)
+                rightGearBox();
+            }
+            function RotateRight(){
+                RIGHTassem.attach(LEFTAssen)
+                RIGHTassem.rotateY(-0.01)
+                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),-0.01)            
+                leftGearBox();                
+            }            
+            function Left(){
+                clearInterval(straight)
+                Turn = setInterval(RotateLeft,25)
+            }
+            function Right(){
+                clearInterval(straight)
+                Turn = setInterval(RotateRight,25)
+            }
+            function Rotation1(){
+                if(Turn){
+                    clearInterval(Turn)
+                    mesh.attach(RIGHTassem)
+                    mesh.attach(LEFTAssen)
+                    straight = setInterval(Rotation,25)
+                }
+            }            
+            scene1.addEventListener('loaded', function (e) {
+                mesh = gltf.getObject3D('mesh');
+                console.log(mesh)
+                LEFTAssen = mesh.children[1]
+                RIGHTassem = mesh.children[0]
+                straight = setInterval(Rotation,25)
+            });
+        </script>
+    </body>
+</html>
