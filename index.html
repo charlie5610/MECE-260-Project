@@ -10,7 +10,7 @@
 
     <body style="margin: 0; overflow: hidden;">
         <div align="center" style='position: fixed; top: 10px; width:100%; text-align: right; z-index: 1;'>
-            <input type=button id="Left" value="Turn Left" onmousedown="Left()" onmouseup="Rotation1()"/>
+            <input type=button id="Left" value="Turn Left" ontouchstart="Left()" ontouchend="Rotation1()"/>
             <input type=button id="Right" value="Turn Right" onmousedown="Right()" onmouseup="Rotation1()"/>
         </div>
         <a-scene
