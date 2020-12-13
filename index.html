@@ -76,14 +76,14 @@
             }            
             function RotateLeft(){
                 LEFTAssen.attach(RIGHTassem)
-                LEFTAssen.rotateY(0.01)
-                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),0.01)
+                LEFTAssen.rotateY(0.1)
+                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),0.1)
                 rightGearBox();
             }
             function RotateRight(){
                 RIGHTassem.attach(LEFTAssen)
-                RIGHTassem.rotateY(-0.01)
-                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),-0.01)            
+                RIGHTassem.rotateY(-0.1)
+                Lvec.applyAxisAngle(new THREE.Vector3(0,1,0),-0.1)            
                 leftGearBox();                
             }            
             function Left(){
